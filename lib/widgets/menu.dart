@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firstpro/screen/profil.dart';
-import 'package:firstpro/screen/history.dart';
+import 'package:firstpro/screens/profil.dart';
+import 'package:firstpro/screens/history.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -48,23 +48,23 @@ class Menu extends StatelessWidget {
       },
       onSelected: (value) {
         // Aksi yang dilakukan saat menu dipilih
-        if (value == 'profil') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const Profil(), // Ganti dengan layar tujuan untuk Menu 2
-            ),
-          );
-        } else if (value == 'history') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const History(), // Ganti dengan layar tujuan untuk Menu 2
-            ),
-          );
-        }
+        // if (value == 'profil') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) =>
+        //           Profil(), // Ganti dengan layar tujuan untuk Menu 2
+        //     ),
+        //   );
+        // } else if (value == 'history') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) =>
+        //           ActivityHistoryPage(), // Ganti dengan layar tujuan untuk Menu 2
+        //     ),
+        //   );
+        // }
       },
     );
   }

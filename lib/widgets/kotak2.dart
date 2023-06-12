@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Kotak2 extends StatelessWidget {
-  final String judul;
-  final String text;
+  final String text1;
+  final String? text2;
 
-  const Kotak2({super.key, required this.judul, required this.text});
+  const Kotak2({super.key, required this.text1, this.text2});
 
   get children => null;
 
@@ -12,7 +12,7 @@ class Kotak2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.only(top: 16.0, right: 8),
+        margin: const EdgeInsets.only(top: 10.0, right: 8),
         padding: EdgeInsets.only(right: 15, left: 15),
         height: 50.0,
         decoration: BoxDecoration(
@@ -23,11 +23,11 @@ class Kotak2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              judul,
+              text1,
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
             Text(
-              text,
+              text2 ?? '',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

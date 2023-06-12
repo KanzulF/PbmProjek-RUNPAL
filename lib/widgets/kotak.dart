@@ -29,17 +29,18 @@ class Kotak extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: EdgeInsets.only(top: 7)),
+                Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
                   judul,
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   text,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ],
             )
