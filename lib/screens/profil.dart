@@ -1,134 +1,141 @@
-// import 'package:firstpro/controllers/user.dart';
-// import 'package:flutter/material.dart';
-// import 'package:firstpro/widgets/kotak2.dart';
-// import 'package:firstpro/models/user.dart';
-// import 'dart:convert';
+import 'package:firstpro/controllers/user.dart';
+import 'package:flutter/material.dart';
+import 'package:firstpro/widgets/kotak2.dart';
+import 'package:firstpro/models/user.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class Profil extends StatefulWidget {
-//   Profil({Key? key}) : super(key: key);
+class Profil extends StatefulWidget {
+  Profil({Key? key}) : super(key: key);
 
-//   @override
-//   _ProfilState createState() => _ProfilState();
-// }
+  @override
+  _ProfilState createState() => _ProfilState();
+}
 
-// class _ProfilState extends State<Profil> {
-//   UserRepository repository = UserRepository();
-//   TextEditingController nameController = TextEditingController();
-//   TextEditingController ageController = TextEditingController();
-//   TextEditingController genderController = TextEditingController();
-//   TextEditingController levelController = TextEditingController();
-//   TextEditingController distanceController = TextEditingController();
-//   TextEditingController goalsController = TextEditingController();
+class _ProfilState extends State<Profil> {
+  Future<String?> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    return userId;
+  }
 
-//   @override
-//   saveData() async {
-//     if (user != null) {
-//       User updatedUser = User(
-//         id: user!.id,
-//         name: nameController.text,
-//         // age: int.tryParse(ageController.text) ?? 0,
-//         // gender: genderController.text,
-//       );
-//       try {
-//         await repository.updateUser(updatedUser);
-//         setState(() {
-//           user = updatedUser;
-//         });
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('User data updated successfully')),
-//         );
-//       } catch (e) {
-//         print(e);
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Failed to update user data')),
-//         );
-//       }
-//     }
-//   }
+  Future<dynamic> getDataUser() async {
+    String? userId = await getUserId();
+    final url = 'https://runpal.sirkell.com/api/user/get/$userId';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.black,
-//         centerTitle: true,
-//         title: Image.asset('assets/icons/runpal.png', height: 50),
-//         actions: [
-//           IconButton(
-//             icon: Icon(Icons.save),
-//             onPressed: saveData,
-//           ),
-//         ],
-//       ),
-//       body: user != null
-//           ? Padding(
-//               padding: EdgeInsets.all(16.0),
-//               child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     SizedBox(height: 20),
-//                     const Text(
-//                       'Profil',
-//                       style: TextStyle(fontSize: 24, color: Colors.white),
-//                     ),
-//                     SizedBox(height: 20),
-//                     const Text(
-//                       'Name',
-//                       style: TextStyle(fontSize: 18, color: Colors.white),
-//                     ),
-//                     Row(
-//                       children: [
-//                         TextField(
-//                           controller: nameController,
-//                           decoration: InputDecoration(labelText: 'Name'),
-//                         ),
-//                         // Kotak2(
-//                         //   text1: '${user!.name}',
-//                         // ),
-//                       ],
-//                     ),
-//                     SizedBox(height: 20),
-//                     const Text(
-//                       'Age',
-//                       style: TextStyle(fontSize: 18, color: Colors.white),
-//                     ),
-//                     Row(
-//                       children: [
-//                         TextField(
-//                           controller: ageController,
-//                           decoration: InputDecoration(labelText: 'Age'),
-//                           keyboardType: TextInputType.number,
-//                         ),
-//                         // Kotak2(
-//                         //   text1: '${user!.age}',
-//                         // ),
-//                       ],
-//                     ),
-//                     SizedBox(height: 20),
-//                     const Text(
-//                       'Gender',
-//                       style: TextStyle(fontSize: 18, color: Colors.white),
-//                     ),
-//                     Row(
-//                       children: [
-//                         TextField(
-//                           controller: genderController,
-//                           decoration: InputDecoration(labelText: 'Gender'),
-//                         ),
-//                         // Kotak2(
-//                         //   text1: '${user!.gender}',
-//                         // ),
-//                       ],
-//                     ),
-//                   ]))
-//           : Center(
-//               child: Text(
-//                 'asdas',
-//                 style: TextStyle(fontSize: 18, color: Colors.white),
-//               ),
-//             ),
-//     );
-//   }
-// }
+    try {
+      final response = await http.get(Uri.parse(url));
 
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
 
+        return jsonData;
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Image.asset('assets/icons/runpal.png', height: 50),
+        actions: [],
+      ),
+      body: FutureBuilder(
+        future: getDataUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          } else {
+            dynamic data = snapshot.data;
+            dynamic user = data['data'];
+            return Padding(
+              padding:
+                  EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Name',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['name']}'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Email',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['email']}'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Experience',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['exp']}'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Level',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['level']}'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Distance',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['distance']}'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Goals',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Row(
+                      children: [
+                        Kotak2(text1: '${user['goals']}'),
+                      ],
+                    ),
+                  ]),
+            );
+          }
+        },
+      ),
+    );
+  }
+}

@@ -47,24 +47,23 @@ class Menu extends StatelessWidget {
         ];
       },
       onSelected: (value) {
-        // Aksi yang dilakukan saat menu dipilih
-        // if (value == 'profil') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) =>
-        //           Profil(), // Ganti dengan layar tujuan untuk Menu 2
-        //     ),
-        //   );
-        // } else if (value == 'history') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) =>
-        //           ActivityHistoryPage(), // Ganti dengan layar tujuan untuk Menu 2
-        //     ),
-        //   );
-        // }
+        if (value == 'profil') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Profil(), // Ganti dengan layar tujuan untuk Menu 2
+            ),
+          );
+        } else if (value == 'history') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HistoryScreen(), // Ganti dengan layar tujuan untuk Menu 2
+            ),
+          );
+        }
       },
     );
   }

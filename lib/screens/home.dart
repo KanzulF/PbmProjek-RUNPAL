@@ -270,7 +270,7 @@ class Home extends StatelessWidget {
                     //     ),
                     //   ],
                     // )
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -283,7 +283,7 @@ class Home extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Go Run',
                             style: TextStyle(
                               fontSize: 24,

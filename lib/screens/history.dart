@@ -1,32 +1,41 @@
-import 'package:firstpro/widgets/kotak2.dart';
+import 'package:firstpro/controllers/user.dart';
 import 'package:flutter/material.dart';
-import 'package:firstpro/widgets/menu.dart';
-import 'package:firstpro/controllers/activity.dart';
-import 'package:firstpro/models/activity.dart';
+import 'package:firstpro/widgets/kotak2.dart';
+import 'package:firstpro/models/user.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ActivityHistoryPage extends StatefulWidget {
+class HistoryScreen extends StatefulWidget {
+  HistoryScreen({Key? key}) : super(key: key);
+
   @override
-  _ActivityHistoryPageState createState() => _ActivityHistoryPageState();
+  _HistoryScreenState createState() => _HistoryScreenState();
 }
 
-class _ActivityHistoryPageState extends State<ActivityHistoryPage> {
-  List<Activity> activities = [];
-  ActivityRepository repository = ActivityRepository();
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
+class _HistoryScreenState extends State<HistoryScreen> {
+  Future<String?> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    return userId;
   }
 
-  getData() async {
+  Future<dynamic> getDataUser() async {
+    String? userId = await getUserId();
+    final url = 'https://runpal.sirkell.com/api/user/get/$userId';
+
     try {
-      List<Activity> fetchedActivities = await repository.getUserActivities();
-      setState(() {
-        activities = fetchedActivities;
-      });
-    } catch (e) {
-      print(e);
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+
+        return jsonData;
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
     }
   }
 
@@ -37,21 +46,51 @@ class _ActivityHistoryPageState extends State<ActivityHistoryPage> {
         backgroundColor: Colors.black,
         centerTitle: true,
         title: Image.asset('assets/icons/runpal.png', height: 50),
+        actions: [],
       ),
-      body: activities.isNotEmpty
-          ? ListView.builder(
-              itemCount: activities.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(activities[index].name),
-                  subtitle: Text(activities[index].description),
-                  trailing: Text(activities[index].date.toString()),
-                );
-              },
-            )
-          : Center(
+      body: FutureBuilder(
+        future: getDataUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
               child: CircularProgressIndicator(),
-            ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          } else {
+            dynamic data = snapshot.data;
+            dynamic user = data['data'];
+            return Padding(
+              padding:
+                  EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+              child: Column(children: [
+                const Text(
+                  'History',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                Row(
+                  children: [
+                    Kotak2(
+                      text1: '${user['name']}',
+                      text2: "asdasd",
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Kotak2(text1: '${user['email']}'),
+                  ],
+                ),
+              ]),
+            );
+          }
+        },
+      ),
     );
   }
 }
