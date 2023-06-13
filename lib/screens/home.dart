@@ -65,6 +65,34 @@ class Home extends StatelessWidget {
           Menu(),
         ],
       ),
+      floatingActionButton: Container(
+        height: 60,
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    GoRun(), // Ganti dengan layar tujuan untuk Menu 2
+              ),
+            );
+          },
+          label: const Text(
+            'Go Run',
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          ),
+          icon: Icon(
+            Icons.directions_run,
+            size: 28,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
       body: FutureBuilder(
         future: Future.wait([getDataUser(), getDataHistory()]),
         builder: (context, snapshot) {
@@ -278,32 +306,6 @@ class Home extends StatelessWidget {
                     //     ),
                     //   ],
                     // )
-                    const SizedBox(height: 20.0),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    GoRun(), // Ganti dengan layar tujuan untuk Menu 2
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          child: const Text(
-                            'Go Run',
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          )),
-                    ),
                   ],
                 ));
           }
