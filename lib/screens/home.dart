@@ -85,7 +85,7 @@ class Home extends StatelessWidget {
             dynamic user = data['data']; // Ambil item pertama
             dynamic history = data2['data']; // Ambil item pertama
             print(history);
-            return Padding(
+            return SingleChildScrollView(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

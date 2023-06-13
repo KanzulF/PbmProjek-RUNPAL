@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
         title: Text('Login'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(48.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
