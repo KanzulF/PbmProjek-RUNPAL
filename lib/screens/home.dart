@@ -84,6 +84,7 @@ class Home extends StatelessWidget {
             dynamic data2 = snapshot.data![1];
             dynamic user = data['data']; // Ambil item pertama
             dynamic history = data2['data']; // Ambil item pertama
+            print(history);
             return Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -100,15 +101,16 @@ class Home extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Kotak(
-                          judul: '2 Days',
+                          judul: '${user['last_run']}',
                           text: 'From your last run',
                           icon: Icons.history,
                         ),
                         Kotak(
-                          judul: '3 Km',
+                          judul:
+                              '${((user['level'] + 1) * 10) - user['distance']} Km',
                           text: 'Run to increas your level',
                           icon: Icons.next_plan,
                         ),
@@ -163,7 +165,7 @@ class Home extends StatelessWidget {
                                   ),
                                   SizedBox(height: 18.0),
                                   Text(
-                                    '3 Km more To Increase your level',
+                                    '${((user['level'] + 1) * 10) - user['distance']} Km more To Increase your level',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0,
@@ -185,7 +187,7 @@ class Home extends StatelessWidget {
                                   color: const Color.fromARGB(255, 46, 46, 46),
                                   borderRadius: BorderRadius.circular(15.0),
                                 ),
-                                child: const Column(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
@@ -198,7 +200,7 @@ class Home extends StatelessWidget {
                                     ),
                                     SizedBox(height: 12.0),
                                     Text(
-                                      '40 Km',
+                                      '${user['distance']} Km',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 0, 4, 255),
                                         fontSize: 28,
@@ -207,7 +209,7 @@ class Home extends StatelessWidget {
                                     ),
                                     SizedBox(height: 6.0),
                                     Text(
-                                      'in 25 days',
+                                      'in ${user['first_run']}',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
@@ -255,14 +257,19 @@ class Home extends StatelessWidget {
                       'Records',
                       style: TextStyle(fontSize: 24, color: Colors.white),
                     ),
-                    const Row(
-                      children: [
-                        Kotak2(
-                          text1: 'Thursday, 13 May 2023',
-                          text2: '30 Min 5 Km',
-                        ),
-                      ],
-                    ),
+                    // print(history),
+                    for (int i = 0;
+                        i < (history.length > 2 ? 2 : history.length);
+                        i++)
+                      Row(
+                        children: [
+                          Kotak2(
+                            text1: '${history[i]['time']}',
+                            text2: '30 Min 5 Km',
+                          ),
+                        ],
+                      ),
+
                     // const Row(
                     //   children: [
                     //     Kotak2(

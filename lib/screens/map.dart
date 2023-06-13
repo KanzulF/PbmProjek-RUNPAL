@@ -44,14 +44,11 @@ class _MapScreenState extends State<MapScreen> {
           ? GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: LatLng(
-                  _currentPosition!.latitude!,
-                  _currentPosition!.longitude!,
+                  _currentPosition!.latitude,
+                  _currentPosition!.longitude,
                 ),
                 zoom: 15.0,
               ),
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-              },
               myLocationEnabled: true,
             )
           : Center(
