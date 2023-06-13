@@ -1,5 +1,6 @@
 import 'package:firstpro/controllers/user.dart';
 import 'package:firstpro/screens/map.dart';
+import 'package:firstpro/screens/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firstpro/widgets/kotak2.dart';
 import 'package:firstpro/models/user.dart';
@@ -50,6 +51,16 @@ class _GoRunState extends State<GoRun> {
         centerTitle: true,
         title: Image.asset('assets/icons/runpal.png', height: 50),
         actions: [],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          );
+        },
+        child: const Icon(Icons.camera),
+        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder(
         future: getDataUser(),
