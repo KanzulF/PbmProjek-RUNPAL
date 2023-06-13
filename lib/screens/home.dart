@@ -1,3 +1,4 @@
+import 'package:firstpro/screens/gorun.dart';
 import 'package:firstpro/widgets/kotak.dart';
 import 'package:firstpro/widgets/kotak2.dart';
 import 'package:firstpro/widgets/menu.dart';
@@ -276,7 +277,13 @@ class Home extends StatelessWidget {
                       height: 50,
                       child: ElevatedButton(
                           onPressed: () {
-                            // Logika ketika tombol ditekan
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    GoRun(), // Ganti dengan layar tujuan untuk Menu 2
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
