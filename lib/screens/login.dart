@@ -75,79 +75,81 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Login'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(48.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.asset(
-                'assets/icons/runpal.png', // Ubah dengan path file gambar Anda
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 46, 46, 46),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  contentPadding: EdgeInsets.only(left: 15, top: 5),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 46, 46, 46),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  fillColor: Colors.grey[300],
-                  labelText: 'Password',
-                  contentPadding: EdgeInsets.only(left: 15, top: 5),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _login,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: _isLoading ? CircularProgressIndicator() : Text('Login'),
-            ),
-            SizedBox(height: 8.0),
-            Text(
-              _errorMessage,
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text('Login'),
         ),
-      ),
-    );
+        body: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(48.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/icons/runpal.png', // Ubah dengan path file gambar Anda
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 46, 46, 46),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      contentPadding: EdgeInsets.only(left: 15, top: 5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 46, 46, 46),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey[300],
+                      labelText: 'Password',
+                      contentPadding: EdgeInsets.only(left: 15, top: 5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child:
+                      _isLoading ? CircularProgressIndicator() : Text('Login'),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  _errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
