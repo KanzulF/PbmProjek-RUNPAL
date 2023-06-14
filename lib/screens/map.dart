@@ -29,6 +29,7 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         _currentPosition = position;
         print('print testing ${_currentPosition}');
+        print('print testing ${_currentPosition}');
       });
     } catch (e) {
       print('Error: $e');

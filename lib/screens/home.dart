@@ -1,4 +1,5 @@
 import 'package:firstpro/screens/gorun.dart';
+import 'package:firstpro/screens/tracking1.dart';
 import 'package:firstpro/widgets/kotak.dart';
 import 'package:firstpro/widgets/kotak2.dart';
 import 'package:firstpro/widgets/menu.dart';
@@ -73,8 +74,7 @@ class Home extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    GoRun(), // Ganti dengan layar tujuan untuk Menu 2
+                builder: (context) => TrackingScreen2(),
               ),
             );
           },
