@@ -68,7 +68,7 @@ class Home extends StatelessWidget {
       ),
       floatingActionButton: Container(
         height: 60,
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery.of(context).size.width * 0.92,
         child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(
