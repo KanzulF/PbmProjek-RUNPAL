@@ -1,5 +1,6 @@
 import 'package:firstpro/controllers/user.dart';
 import 'package:firstpro/screens/map.dart';
+import 'package:firstpro/screens/tracking1.dart';
 import 'package:flutter/material.dart';
 import 'package:firstpro/widgets/kotak2.dart';
 import 'package:firstpro/models/user.dart';
@@ -8,6 +9,50 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/material.dart';
+
+class _MapScreenState extends State<MapScreen> {
+  late GoogleMapController mapController;
+  late Position currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      currentPosition = position;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+            currentPosition.latitude,
+            currentPosition.longitude,
+          ),
+          zoom: 15,
+        ),
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+      ),
+    );
+  }
+}
 
 class GoRun extends StatefulWidget {
   GoRun({Key? key}) : super(key: key);
@@ -68,19 +113,34 @@ class _GoRunState extends State<GoRun> {
           } else {
             dynamic data = snapshot.data;
             dynamic user = data['data'];
-            return Center(
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-                child: Column(children: [
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Are You Ready?!',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
+            return Scaffold(
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TrackingScreen2(),
+                    ),
+                  );
+                },
+                label: const Text(
+                  'Ready',
+                  style: TextStyle(
+                    fontSize: 18,
                   ),
-                  MapScreen(),
-                ]),
+                ),
+                icon: Icon(
+                  Icons.directions_run,
+                  size: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                backgroundColor: Colors.green,
               ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              body: MapScreen(),
             );
           }
         },

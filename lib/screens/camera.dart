@@ -12,8 +12,8 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  late List<CameraDescription> _cameras;
-  late int _selectedCameraIndex;
+  late List<CameraDescription> _cameras = [];
+  late int _selectedCameraIndex = 0;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _CameraPageState extends State<CameraPage> {
 
   void _flipCamera() {
     setState(() {
-      _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras.length;
+      _selectedCameraIndex = _selectedCameraIndex == 0 ? 1 : 0;
       _controller = CameraController(
         _cameras[_selectedCameraIndex],
         ResolutionPreset.medium,
@@ -98,7 +98,10 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Camera Page'),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Image.asset('assets/icons/runpal.png', height: 50),
+        actions: [],
       ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
@@ -139,7 +142,10 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Display Picture'),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Image.asset('assets/icons/runpal.png', height: 50),
+        actions: [],
       ),
       body: Center(
         child: Image.file(

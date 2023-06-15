@@ -171,7 +171,10 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tracking Screen'),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Image.asset('assets/icons/runpal.png', height: 50),
+        actions: [],
       ),
       body: _lastPosition != null
           ? Stack(

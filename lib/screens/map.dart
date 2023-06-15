@@ -39,8 +39,8 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300, // Lebar tampilan peta
-      height: 300, // Tinggi tampilan peta
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
       child: _currentPosition != null
           ? GoogleMap(
               initialCameraPosition: CameraPosition(

@@ -74,7 +74,7 @@ class Home extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TrackingScreen2(),
+                builder: (context) => GoRun(),
               ),
             );
           },
