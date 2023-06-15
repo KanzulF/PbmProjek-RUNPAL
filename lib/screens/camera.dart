@@ -1,52 +1,52 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:camera/camera.dart';
+import 'dart:io';
+import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class CameraPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Camera App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CameraHome(),
-    );
-  }
+  _CameraPageState createState() => _CameraPageState();
 }
 
-class CameraHome extends StatefulWidget {
-  @override
-  _CameraHomeState createState() => _CameraHomeState();
-}
-
-class _CameraHomeState extends State<CameraHome> {
+class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late List<CameraDescription> _cameras;
+  late int _selectedCameraIndex;
 
   @override
   void initState() {
     super.initState();
-    _initializeControllerFuture = _initializeCamera();
+    _initializeCamera();
   }
 
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
-    final camera = cameras.first;
-
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.high,
+    final frontCamera = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+      orElse: () => cameras.first,
     );
+    _controller = CameraController(
+      frontCamera,
+      ResolutionPreset.medium,
+    );
+    _initializeControllerFuture = _controller.initialize();
+    await _initializeControllerFuture; // Wait for the controller to be initialized
+    if (mounted) {
+      setState(() {}); // Trigger a rebuild after initialization
+    }
+  }
 
-    return _controller.initialize();
+  void _flipCamera() {
+    setState(() {
+      _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras.length;
+      _controller = CameraController(
+        _cameras[_selectedCameraIndex],
+        ResolutionPreset.medium,
+      );
+      _initializeControllerFuture = _controller.initialize();
+    });
   }
 
   @override
@@ -55,25 +55,28 @@ class _CameraHomeState extends State<CameraHome> {
     super.dispose();
   }
 
-  void _takePicture() async {
+  Future<void> _takePicture() async {
     try {
       await _initializeControllerFuture;
+
       final path = join(
         (await getTemporaryDirectory()).path,
         '${DateTime.now()}.png',
       );
 
-      await _controller.takePicture();
+      XFile picture = await _controller.takePicture();
+      await picture.saveTo(path);
 
       Navigator.push(
-        context as BuildContext,
+        context,
         MaterialPageRoute(
           builder: (context) => DisplayPictureScreen(imagePath: path),
         ),
       );
     } catch (e) {
+      print("Camera error: $e");
       showDialog(
-        context: context as BuildContext,
+        context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
           content:
@@ -95,7 +98,7 @@ class _CameraHomeState extends State<CameraHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Camera App'),
+        title: const Text('Camera Page'),
       ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
@@ -107,9 +110,19 @@ class _CameraHomeState extends State<CameraHome> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _takePicture,
-        child: const Icon(Icons.camera),
+      floatingActionButton: Flex(
+        direction: Axis.horizontal,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            onPressed: _flipCamera,
+            child: const Icon(Icons.flip_camera_ios),
+          ),
+          FloatingActionButton(
+            onPressed: _takePicture,
+            child: const Icon(Icons.camera),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -125,9 +138,13 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Display Picture')),
+      appBar: AppBar(
+        title: const Text('Display Picture'),
+      ),
       body: Center(
-        child: Image.file(File(imagePath)),
+        child: Image.file(
+          File(imagePath),
+        ),
       ),
     );
   }

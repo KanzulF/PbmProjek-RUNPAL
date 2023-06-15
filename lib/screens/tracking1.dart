@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firstpro/screens/camera.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -123,7 +124,11 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
       print('Response Body: ${response.body}');
       print('Response Body: ${response.statusCode}');
       if (response.statusCode == 201) {
-        Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CameraPage()),
+        ); // Kembali ke halaman sebelumnya
       } else {
         throw Exception('Failed to send data');
       }
