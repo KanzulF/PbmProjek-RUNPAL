@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firstpro/screens/camera.dart';
 import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
@@ -109,6 +111,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
     String? userId = await getUserId();
     DateTime now = DateTime.now();
     BigInt timestamp = BigInt.from(now.millisecondsSinceEpoch);
+
     try {
       final url = Uri.parse('https://runpal.sirkell.com/api/history/create');
       final response = await http.post(
@@ -121,13 +124,18 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
           'status': 'completed',
         },
       );
-      print('Response Body: ${response.body}');
-      print('Response Body: ${response.statusCode}');
       if (response.statusCode == 201) {
-        Navigator.pop(context);
+        Uint8List routeImageBytes =
+            await _mapController.takeSnapshot() as Uint8List;
+
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CameraPage()),
+          MaterialPageRoute(
+              builder: (context) => CameraPage(
+                    routeImage: routeImageBytes,
+                    distance: _distance.toString(),
+                    time: _elapsedSeconds.toString(),
+                  )),
         ); // Kembali ke halaman sebelumnya
       } else {
         throw Exception('Failed to send data');

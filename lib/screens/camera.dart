@@ -1,10 +1,23 @@
+import 'package:firstpro/screens/displaypictures.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CameraPage extends StatefulWidget {
+  final Uint8List routeImage;
+  final String distance;
+  final String time;
+
+  const CameraPage(
+      {super.key,
+      required this.routeImage,
+      required this.distance,
+      required this.time});
+
   @override
   _CameraPageState createState() => _CameraPageState();
 }
@@ -19,6 +32,11 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     _initializeCamera();
+    _getAvailableCameras();
+  }
+
+  Future<void> _getAvailableCameras() async {
+    _cameras = await availableCameras();
   }
 
   Future<void> _initializeCamera() async {
@@ -40,7 +58,7 @@ class _CameraPageState extends State<CameraPage> {
 
   void _flipCamera() {
     setState(() {
-      _selectedCameraIndex = _selectedCameraIndex == 0 ? 1 : 0;
+      _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras.length;
       _controller = CameraController(
         _cameras[_selectedCameraIndex],
         ResolutionPreset.medium,
@@ -50,12 +68,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _takePicture() async {
+  Future<void> _takePicture(
+      Uint8List image, String distance, String time) async {
     try {
       await _initializeControllerFuture;
 
@@ -66,11 +80,15 @@ class _CameraPageState extends State<CameraPage> {
 
       XFile picture = await _controller.takePicture();
       await picture.saveTo(path);
-
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DisplayPictureScreen(imagePath: path),
+          builder: (context) => DisplayPictureScreen(
+            imagePath: path,
+            routeImage: image,
+            distance: distance,
+            time: time,
+          ),
         ),
       );
     } catch (e) {
@@ -101,7 +119,12 @@ class _CameraPageState extends State<CameraPage> {
         backgroundColor: Colors.black,
         centerTitle: true,
         title: Image.asset('assets/icons/runpal.png', height: 50),
-        actions: [],
+        actions: [
+          IconButton(
+            onPressed: _flipCamera,
+            icon: Icon(Icons.flip_camera_ios),
+          ),
+        ],
       ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
@@ -113,45 +136,12 @@ class _CameraPageState extends State<CameraPage> {
           }
         },
       ),
-      floatingActionButton: Flex(
-        direction: Axis.horizontal,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          FloatingActionButton(
-            onPressed: _flipCamera,
-            child: const Icon(Icons.flip_camera_ios),
-          ),
-          FloatingActionButton(
-            onPressed: _takePicture,
-            child: const Icon(Icons.camera),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            _takePicture(widget.routeImage, widget.distance, widget.time),
+        child: const Icon(Icons.camera),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-  }
-}
-
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-
-  const DisplayPictureScreen({Key? key, required this.imagePath})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Image.asset('assets/icons/runpal.png', height: 50),
-        actions: [],
-      ),
-      body: Center(
-        child: Image.file(
-          File(imagePath),
-        ),
-      ),
     );
   }
 }
