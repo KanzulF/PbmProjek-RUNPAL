@@ -293,19 +293,11 @@ class Home extends StatelessWidget {
                         children: [
                           Kotak2(
                             text1: '${history[i]['time']}',
-                            text2: '30 Min 5 Km',
+                            text2:
+                                '${history[i]['duration']} menit ${history[i]['distance']} meter',
                           ),
                         ],
                       ),
-
-                    // const Row(
-                    //   children: [
-                    //     Kotak2(
-                    //       judul: 'Thursday, 13 May 2023',
-                    //       text: '30 Min 5 Km',
-                    //     ),
-                    //   ],
-                    // )
                   ],
                 ));
           }
