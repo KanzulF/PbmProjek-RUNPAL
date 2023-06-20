@@ -34,7 +34,7 @@ class Kotak extends StatelessWidget {
                   judul,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white,
+                    color: const Color.fromARGB(255, 255, 18, 18),
                     fontWeight: FontWeight.bold,
                   ),
                 ),

@@ -186,20 +186,32 @@ class Home extends StatelessWidget {
                                   Text(
                                     '${user['level']}',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Color.fromARGB(255, 0, 255, 21),
                                       fontSize: 48,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(height: 18.0),
-                                  Text(
-                                    '${((user['level'] + 1) * 10) - user['distance']} Km more To Increase your level',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.0,
-                                    ),
+                                  RichText(
                                     textAlign: TextAlign.center,
-                                  ),
+                                    text: TextSpan(
+                                      style: TextStyle(fontSize: 18.0),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${((user['level'] + 1) * 10) - user['distance']} ',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              'Km more to increase your level',
+                                          style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255)),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               )),
                         ),
@@ -227,12 +239,28 @@ class Home extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(height: 12.0),
-                                    Text(
-                                      '${user['distance']} Km',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 4, 255),
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '${user['distance']}',
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  0, 133, 255, 1),
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: ' Km',
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     SizedBox(height: 6.0),
@@ -266,14 +294,29 @@ class Home extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 12.0),
-                                    Text(
-                                      '${user['goals']} Goals',
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 3, 255, 87),
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '${user['goals']}',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 3, 255, 87),
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: ' Goals',
+                                            style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 28,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 )),
                           ],

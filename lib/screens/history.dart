@@ -32,7 +32,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   String _formatTime(int seconds) {
     int hours = seconds ~/ 3600;
     int minutes = (seconds % 3600) ~/ 60;
-    int remainingSeconds = seconds % 60;
+    int remainingSeconds = seconds;
 
     String hoursString =
         (hours > 0) ? '${hours.toString().padLeft(1, '0')} jam ' : '';
@@ -106,7 +106,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       Kotak2(
                         text1: '${history[i]['time']}',
                         text2:
-                            '${_formatTime(history[i]['duration'])} ${_formatDistance(history[i]['distance'].toInt())} ',
+                            '${history[i]['duration']} menit ${_formatDistance(history[i]['distance'].toInt())} ',
                       ),
                     ],
                   ),
